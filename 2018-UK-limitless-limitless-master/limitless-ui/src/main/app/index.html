@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+
+
+
+    <!-- Resources -->
+    <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all"/>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script src="jquery-3.3.1.min.js"></script>
+
+    <script src="//www.amcharts.com/lib/4/core.js"></script>
+    <script src="//www.amcharts.com/lib/4/maps.js"></script>
+    <script src="//www.amcharts.com/lib/4/geodata/worldLow.js"></script>
+
+    <script src="//www.amcharts.com/lib/4/charts.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <script src="line-chart.js"></script>
+    <script src="worldmap.js"></script>
+    <script src="sectors-charts.js"></script>
+
+
+    <title>Limitless!</title>
+    <script>
+
+var app = angular.module("myApp", []);
+app.controller("myCtrl", function($scope) {
+    $scope.sectorData = [
+{"code":"ENERGY" , "name":"Energy", "value":10, "color":"#FF0000"},
+{"code":"MATERIALS" , "name":"Materials", "value":34, "color":"#FF0000"},
+{"code":"INDUSTRIALS" , "name":"Industrials", "value":22, "color":"#FF0000"},
+{"code":"CONSUMERDISC" , "name":"Consumer Disc", "value":543, "color":"#FF0000"},
+{"code":"HEATHCARE" , "name":"Heathcare", "value":312, "color":"#FF0000"},
+{"code":"FINANCIALS" , "name":"Financials", "value":32, "color":"#FF0000"},
+{"code":"INFOTECHO" , "name":"Info Tech", "value":124, "color":"#FF0000"}
+
+];
+
+$.getJSON('http://localhost:8080/fetchAllFeeds', function(data) {
+    //data is the JSON string
+    $("#summaryInfo").append(data);
+});
+});
+
+
+<!--$scope.sectorData = sectorData-->
+
+<!--for ( var i = 0; i < sectorData.length; i++ ) {-->
+  <!--var dataItem = sectorData[i];-->
+  <!--var value = dataItem.value;-->
+  <!--var id = dataItem.code;-->
+
+  <!--&lt;!&ndash;document.getElementById('sectors').innerHTML = '<button type="button" class="btn btn-primary">Energy <span class="badge badge-light">4</span></button>';&ndash;&gt;-->
+<!--}-->
+
+    </script>
+
+
+</head>
+<style>
+body {background-color: #343a40 !important;}
+h1   {color: black;}
+h3   {color: black;}
+p    {color: black;}
+#worldmapdiv {
+  width: 100%;
+  height: 500px;
+}
+
+#Politics {
+	width	: 100%;
+	height	: 500px;
+}
+
+#Economy {
+	width	: 100%;
+	height	: 500px;
+}
+
+#Environment {
+	width	: 100%;
+	height	: 500px;
+}
+
+#Financials {
+	width	: 100%;
+	height	: 500px;
+}
+
+#Exxon {
+	width	: 100%;
+	height	: 500px;
+}
+
+.summarySection{
+    display: inline;
+    color:black;
+}
+
+#Enbridge {
+	width	: 100%;
+	height	: 500px;
+}
+
+#BP {
+	width	: 100%;
+	height	: 500px;
+}
+
+#Ensco {
+	width	: 100%;
+	height	: 500px;
+}
+
+
+.modal-lg {
+    max-width: 80% !important;
+}
+
+
+
+.map-marker {
+    /* adjusting for the marker dimensions
+    so that it is centered on coordinates */
+    margin-left: -8px;
+    margin-top: -8px;
+}
+.map-marker.map-clickable {
+    cursor: pointer;
+}
+.pulse {
+    width: 10px;
+    height: 10px;
+    border: 5px solid #f7f14c;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background-color: #716f42;
+    z-index: 10;
+    position: absolute;
+  }
+.pulse-high {
+    width: 20px;
+    height: 20px;
+    border: 5px solid #FF0000;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background-color: #FF0000;
+    z-index: 20;
+    position: absolute;
+  }
+.pulse-medium {
+    width: 10px;
+    height: 10px;
+    border: 5px solid #C85353;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background-color: #C85353;
+    z-index: 10;
+    position: absolute;
+  }
+.pulse-low {
+    width: 10px;
+    height: 10px;
+    border: 5px solid #DEA8A8;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background-color: #DEA8A8;
+    z-index: 10;
+    position: absolute;
+  }
+.map-marker .dot {
+    border: 10px solid #fff601;
+    background: transparent;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    border-radius: 60px;
+    height: 50px;
+    width: 50px;
+    -webkit-animation: pulse 3s ease-out;
+    -moz-animation: pulse 3s ease-out;
+    animation: pulse 3s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    z-index: 1;
+    opacity: 0;
+  }
+  @-moz-keyframes pulse {
+   0% {
+      -moz-transform: scale(0);
+      opacity: 0.0;
+   }
+   25% {
+      -moz-transform: scale(0);
+      opacity: 0.1;
+   }
+   50% {
+      -moz-transform: scale(0.1);
+      opacity: 0.3;
+   }
+   75% {
+      -moz-transform: scale(0.5);
+      opacity: 0.5;
+   }
+   100% {
+      -moz-transform: scale(1);
+      opacity: 0.0;
+   }
+  }
+  @-webkit-keyframes "pulse" {
+   0% {
+      -webkit-transform: scale(0);
+      opacity: 0.0;
+   }
+   25% {
+      -webkit-transform: scale(0);
+      opacity: 0.1;
+   }
+   50% {
+      -webkit-transform: scale(0.1);
+      opacity: 0.3;
+   }
+   75% {
+      -webkit-transform: scale(0.5);
+      opacity: 0.5;
+   }
+   100% {
+      -webkit-transform: scale(1);
+      opacity: 0.0;
+   }
+  }
+
+.map-marker .dot-high {
+    border: 10px solid #FF0000;
+    background: transparent;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    border-radius: 60px;
+    height: 100px;
+    width: 100px;
+    -webkit-animation: pulse 3s ease-out;
+    -moz-animation: pulse 3s ease-out;
+    animation: pulse 3s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    z-index: 1;
+    opacity: 0;
+  }
+  @-moz-keyframes pulse-high {
+   0% {
+      -moz-transform: scale(0);
+      opacity: 0.0;
+   }
+   25% {
+      -moz-transform: scale(0);
+      opacity: 0.1;
+   }
+   50% {
+      -moz-transform: scale(0.1);
+      opacity: 0.3;
+   }
+   75% {
+      -moz-transform: scale(0.5);
+      opacity: 0.5;
+   }
+   100% {
+      -moz-transform: scale(1);
+      opacity: 0.0;
+   }
+  }
+  @-webkit-keyframes "pulse-high" {
+   0% {
+      -webkit-transform: scale(0);
+      opacity: 0.0;
+   }
+   25% {
+      -webkit-transform: scale(0);
+      opacity: 0.1;
+   }
+   50% {
+      -webkit-transform: scale(0.1);
+      opacity: 0.3;
+   }
+   75% {
+      -webkit-transform: scale(0.5);
+      opacity: 0.5;
+   }
+   100% {
+      -webkit-transform: scale(1);
+      opacity: 0.0;
+   }
+  }
+
+
+</style>
+<body>
+<div ng-app="myApp" ng-controller="myCtrl">
+    <center>
+        <h1>Top Global Trending</h1>
+    </center>
+    <div class="container">
+
+        <div class="row">
+            <p><h3>by country</h3></p>
+            <div id="worldmapdiv"></div>
+        </div>
+        <div class="row">
+            <h3>by sector</h3>
+        </div>
+        <div class="row" style="padding: 10px">
+            <div id="sectors1">
+                    <!--<button type="button" class="btn btn-secondary" ng-repeat="x in sectorData" ng-if="$index < 6">-->
+                        <!--{{x.name}} <span class="badge badge-light">4</span>-->
+                    <!--</button>-->
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Energy <span class="badge badge-light">40</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Materials <span class="badge badge-light">40</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Industrials <span class="badge badge-light">32</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Consumer Discretionary <span class="badge badge-light">43</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Heathcare <span class="badge badge-light">43</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Financials <span class="badge badge-light">76</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="row" style="padding: 10px">
+            <div id="sectors2">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Information Technology <span class="badge badge-light">99</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Telecommunications <span class="badge badge-light">77</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Utilities <span class="badge badge-light">65</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#companiesModal">
+                    Real Estate <span class="badge badge-light">58</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#categoriesModal">
+                    Consumer Staples <span class="badge badge-light">12</span>
+                </button>
+            </div>
+        </div>
+
+        <!--Categories Modal-->
+        <div class="modal fade" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="categoriesModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="categoriesModalLabel">Categories</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="accordion" id="categoriesAccordion">
+                            <div class="card">
+                                <div class="card-header" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapseOne" aria-expanded="false"
+                                                aria-controls="collapseOne">
+                                            Politics
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                                     data-parent="#categoriesAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div id="Politics"></div>
+                                            </div>
+                                            <div class="col-4 summarySection" style="color:black;">
+                                                <h3 class="summarySection" style="color:black;">Summary</h3>
+                                                <div class="summarySection" style="color:black;">
+                                                    <p id="summaryInfo">"Brexit: Flights 'at risk' under no-deal, government warns"</p>
+                                                    <p>"A no-deal Brexit could cause disruption to air travel between the UK and European Union countries, the government warned on Monday. \"If the UK leaves the EU in March 2019 with no agreement in place, UK and EU licensed airlines would lose the automatic right to operate air services between the UK and the EU without seeking advance permission,\" the government said. The warning does not necessarily mean that flights would be grounded the day after Brexit."</p>
+                                                    <p>"The no deal notices the government published this afternoon will make uncomfortable reading for many businesses and consumers, but also for the government. The government argues that these warnings represent contingency planning for a worst case scenario, but until they can guarantee that a deal will be done, preparations will have to be made. The prospect of a no deal Brexit is beginning to loom large. A separate government document warned that UK passengers may have to undergo extra security screening when changing flights in the EU after Brexit."</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="economyHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapseEconomy" aria-expanded="false"
+                                                aria-controls="collapseEconomy">
+                                            Economy
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseEconomy" class="collapse" aria-labelledby="economyHeading"
+                                     data-parent="#categoriesAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div id="Economy"></div>
+                                            </div>
+                                            <div class="col-4 summarySection" style="color:black;">
+                                                <h3 class="summarySection" style="color:black;">Summary</h3>
+                                                <div class="summarySection" style="color:black;">
+                                                    <p id="summaryInfo">"Brexit: Flights 'at risk' under no-deal, government warns"</p>
+                                                    <p>"A no-deal Brexit could cause disruption to air travel between the UK and European Union countries, the government warned on Monday. \"If the UK leaves the EU in March 2019 with no agreement in place, UK and EU licensed airlines would lose the automatic right to operate air services between the UK and the EU without seeking advance permission,\" the government said. The warning does not necessarily mean that flights would be grounded the day after Brexit."</p>
+                                                    <p>"The no deal notices the government published this afternoon will make uncomfortable reading for many businesses and consumers, but also for the government. The government argues that these warnings represent contingency planning for a worst case scenario, but until they can guarantee that a deal will be done, preparations will have to be made. The prospect of a no deal Brexit is beginning to loom large. A separate government document warned that UK passengers may have to undergo extra security screening when changing flights in the EU after Brexit."</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="environmentHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapseEnvironment" aria-expanded="false"
+                                                aria-controls="collapseEnvironment">
+                                            Environment
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseEnvironment" class="collapse" aria-labelledby="environmentHeading"
+                                     data-parent="#categoriesAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div id="Environment"></div>
+                                            </div>
+                                            <div class="col-4 summarySection" style="color:black;">
+                                                <h3 class="summarySection" style="color:black;">Summary</h3>
+                                                <div class="summarySection" style="color:black;">
+                                                    <p id="summaryInfo">"Brexit: Flights 'at risk' under no-deal, government warns"</p>
+                                                    <p>"A no-deal Brexit could cause disruption to air travel between the UK and European Union countries, the government warned on Monday. \"If the UK leaves the EU in March 2019 with no agreement in place, UK and EU licensed airlines would lose the automatic right to operate air services between the UK and the EU without seeking advance permission,\" the government said. The warning does not necessarily mean that flights would be grounded the day after Brexit."</p>
+                                                    <p>"The no deal notices the government published this afternoon will make uncomfortable reading for many businesses and consumers, but also for the government. The government argues that these warnings represent contingency planning for a worst case scenario, but until they can guarantee that a deal will be done, preparations will have to be made. The prospect of a no deal Brexit is beginning to loom large. A separate government document warned that UK passengers may have to undergo extra security screening when changing flights in the EU after Brexit."</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="financialHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapseFinancial" aria-expanded="false"
+                                                aria-controls="collapseFinancial">
+                                            Financials
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseFinancial" class="collapse" aria-labelledby="environmentHeading"
+                                     data-parent="#categoriesAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div id="Financials"></div>
+                                            </div>
+                                            <div class="col-4 summarySection" style="color:black;">
+                                                <h3 class="summarySection" style="color:black;">Summary</h3>
+                                                <div class="summarySection" style="color:black;">
+                                                    <p id="summaryInfo">"Brexit: Flights 'at risk' under no-deal, government warns"</p>
+                                                    <p>"A no-deal Brexit could cause disruption to air travel between the UK and European Union countries, the government warned on Monday. \"If the UK leaves the EU in March 2019 with no agreement in place, UK and EU licensed airlines would lose the automatic right to operate air services between the UK and the EU without seeking advance permission,\" the government said. The warning does not necessarily mean that flights would be grounded the day after Brexit."</p>
+                                                    <p>"The no deal notices the government published this afternoon will make uncomfortable reading for many businesses and consumers, but also for the government. The government argues that these warnings represent contingency planning for a worst case scenario, but until they can guarantee that a deal will be done, preparations will have to be made. The prospect of a no deal Brexit is beginning to loom large. A separate government document warned that UK passengers may have to undergo extra security screening when changing flights in the EU after Brexit."</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Companies Modal-->
+        <div class="modal fade" id="companiesModal" tabindex="-1" role="dialog" aria-labelledby="companiesModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="companiesModalLabel">Companies</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="accordion" id="companiesAccordion">
+                            <div class="card">
+                                <div class="card-header" id="company1Heading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapse-company1" aria-expanded="false"
+                                                aria-controls="collapse-company1">
+                                            Exxon
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapse-company1" class="collapse" aria-labelledby="company1Heading"
+                                     data-parent="#categoriesAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div id="Exxon"></div>
+                                            </div>
+                                            <div class="col-4 summarySection" style="color:black;">
+                                                <h3 class="summarySection" style="color:black;">Summary</h3>
+                                                <div class="summarySection" style="color:black;">
+                                                    <p id="summaryInfo">"Brexit: Flights 'at risk' under no-deal, government warns"</p>
+                                                    <p>"A no-deal Brexit could cause disruption to air travel between the UK and European Union countries, the government warned on Monday. \"If the UK leaves the EU in March 2019 with no agreement in place, UK and EU licensed airlines would lose the automatic right to operate air services between the UK and the EU without seeking advance permission,\" the government said. The warning does not necessarily mean that flights would be grounded the day after Brexit."</p>
+                                                    <p>"The no deal notices the government published this afternoon will make uncomfortable reading for many businesses and consumers, but also for the government. The government argues that these warnings represent contingency planning for a worst case scenario, but until they can guarantee that a deal will be done, preparations will have to be made. The prospect of a no deal Brexit is beginning to loom large. A separate government document warned that UK passengers may have to undergo extra security screening when changing flights in the EU after Brexit."</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="company2Heading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapse-company2" aria-expanded="false"
+                                                aria-controls="collapse-company2">
+                                            Enbridge
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapse-company2" class="collapse" aria-labelledby="company2Heading"
+                                     data-parent="#categoriesAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div id="Enbridge"></div>
+                                            </div>
+                                            <div class="col-4 summarySection" style="color:black;">
+                                                <h3 class="summarySection" style="color:black;">Summary</h3>
+                                                <div class="summarySection" style="color:black;">
+                                                    <p id="summaryInfo">"Brexit: Flights 'at risk' under no-deal, government warns"</p>
+                                                    <p>"A no-deal Brexit could cause disruption to air travel between the UK and European Union countries, the government warned on Monday. \"If the UK leaves the EU in March 2019 with no agreement in place, UK and EU licensed airlines would lose the automatic right to operate air services between the UK and the EU without seeking advance permission,\" the government said. The warning does not necessarily mean that flights would be grounded the day after Brexit."</p>
+                                                    <p>"The no deal notices the government published this afternoon will make uncomfortable reading for many businesses and consumers, but also for the government. The government argues that these warnings represent contingency planning for a worst case scenario, but until they can guarantee that a deal will be done, preparations will have to be made. The prospect of a no deal Brexit is beginning to loom large. A separate government document warned that UK passengers may have to undergo extra security screening when changing flights in the EU after Brexit."</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="company3Heading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapse-company3" aria-expanded="false"
+                                                aria-controls="collapse-company3">
+                                            BP
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapse-company3" class="collapse" aria-labelledby="company3Heading"
+                                     data-parent="#categoriesAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div id="BP"></div>
+                                            </div>
+                                            <div class="col-4 summarySection" style="color:black;">
+                                                <h3 class="summarySection" style="color:black;">Summary</h3>
+                                                <div class="summarySection" style="color:black;">
+                                                    <p id="summaryInfo">"Brexit: Flights 'at risk' under no-deal, government warns"</p>
+                                                    <p>"A no-deal Brexit could cause disruption to air travel between the UK and European Union countries, the government warned on Monday. \"If the UK leaves the EU in March 2019 with no agreement in place, UK and EU licensed airlines would lose the automatic right to operate air services between the UK and the EU without seeking advance permission,\" the government said. The warning does not necessarily mean that flights would be grounded the day after Brexit."</p>
+                                                    <p>"The no deal notices the government published this afternoon will make uncomfortable reading for many businesses and consumers, but also for the government. The government argues that these warnings represent contingency planning for a worst case scenario, but until they can guarantee that a deal will be done, preparations will have to be made. The prospect of a no deal Brexit is beginning to loom large. A separate government document warned that UK passengers may have to undergo extra security screening when changing flights in the EU after Brexit."</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="company4Heading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapse-company4" aria-expanded="false"
+                                                aria-controls="collapse-company4">
+                                            Ensco
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapse-company4" class="collapse" aria-labelledby="company4Heading"
+                                     data-parent="#categoriesAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div id="Ensco"></div>
+                                            </div>
+                                            <div class="col-4 summarySection" style="color:black;">
+                                                <h3 class="summarySection" style="color:black;">Summary</h3>
+                                                <div class="summarySection" style="color:black;">
+                                                    <p id="summaryInfo">"Brexit: Flights 'at risk' under no-deal, government warns"</p>
+                                                    <p>"A no-deal Brexit could cause disruption to air travel between the UK and European Union countries, the government warned on Monday. \"If the UK leaves the EU in March 2019 with no agreement in place, UK and EU licensed airlines would lose the automatic right to operate air services between the UK and the EU without seeking advance permission,\" the government said. The warning does not necessarily mean that flights would be grounded the day after Brexit."</p>
+                                                    <p>"The no deal notices the government published this afternoon will make uncomfortable reading for many businesses and consumers, but also for the government. The government argues that these warnings represent contingency planning for a worst case scenario, but until they can guarantee that a deal will be done, preparations will have to be made. The prospect of a no deal Brexit is beginning to loom large. A separate government document warned that UK passengers may have to undergo extra security screening when changing flights in the EU after Brexit."</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div style="background-color:white;">-->
+        <!--<p><bold>Technologies Used: Java, Spring Boot, Bootstrap, Machine Learning - NLP - NER - POSTags, WebTechnologies</bold></p>-->
+    <!--</div>-->
+    </div>
+</div>
+
+</body>
+</html>

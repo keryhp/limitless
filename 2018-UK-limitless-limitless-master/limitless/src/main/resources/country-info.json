@@ -1,0 +1,28 @@
+{
+  "countries": [
+    {
+      "country": "UK",
+      "items": 567
+    },
+    {
+      "country": "US",
+      "items": 987
+    },
+    {
+      "country": "Germany",
+      "items": 426
+    },
+    {
+      "country": "Kenya",
+      "items": 123
+    },
+    {
+      "country": "India",
+      "items": 432
+    },
+    {
+      "country": "Japan",
+      "items": 432
+    }
+  ]
+}

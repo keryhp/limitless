@@ -1,0 +1,4 @@
+http://feeds.bbci.co.uk/news/world/rss.xml
+http://ir.thomsonreuters.com/rss/news-releases.xml?items=100
+https://www.realwire.com/rss/?id=277
+http://feeds.marketwatch.com/marketwatch/financial/
